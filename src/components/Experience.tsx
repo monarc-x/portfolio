@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { profile, work } from "@/data/content";
+import { profile, projects, work } from "@/data/content";
+import { Archive } from "@/components/Archive";
+import { Contact } from "@/components/Contact";
 import { Screen } from "@/components/Screens";
 
 const HERO = { bg: "#fff4e4", ink: "#1b1310", accent: "#ff5a36" };
@@ -40,21 +42,27 @@ export function Experience() {
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
+    const onPointer = (event: PointerEvent) => {
+      const root = rootRef.current;
+      if (!root || event.pointerType !== "mouse") return;
+      root.style.setProperty("--mx", ((event.clientX / window.innerWidth) * 2 - 1).toFixed(3));
+      root.style.setProperty("--my", ((event.clientY / window.innerHeight) * 2 - 1).toFixed(3));
+    };
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    window.addEventListener("pointermove", onPointer, { passive: true });
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      window.removeEventListener("pointermove", onPointer);
     };
   }, []);
 
   const inStory = active >= 0 && active < work.length;
   const theme = inStory ? work[active] : active >= work.length ? OUTRO : HERO;
   const shown = work[Math.min(Math.max(active, 0), work.length - 1)];
-  const roles = Array.from(new Set(work.map((item) => item.role)));
-
   return (
     <main
       ref={rootRef}
@@ -76,6 +84,10 @@ export function Experience() {
             <span key={item.id} style={{ background: item.bg }} />
           ))}
         </div>
+        <a className="hero-link" href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+          <span aria-hidden="true">in</span>
+          LinkedIn
+        </a>
         <p className="kicker">Portafolio · {profile.title}</p>
         <h1>
           Jorge
@@ -91,6 +103,11 @@ export function Experience() {
               </a>
             </li>
           ))}
+          <li>
+            <a className="chip-all" href="#archivo">
+              Ver todo →
+            </a>
+          </li>
         </ul>
         <dl className="facts">
           <div>
@@ -98,12 +115,12 @@ export function Experience() {
             <dd>{profile.title}</dd>
           </div>
           <div>
-            <dt>Enfoque</dt>
-            <dd>{roles.join(" · ")}</dd>
+            <dt>Experiencia en</dt>
+            <dd>{profile.focus.join(" · ")}</dd>
           </div>
           <div>
             <dt>Proyectos</dt>
-            <dd>{work.length}</dd>
+            <dd>{projects.length}</dd>
           </div>
         </dl>
         <p className="cue" aria-hidden="true">
@@ -132,7 +149,7 @@ export function Experience() {
                     className={item.id === shown.id ? "layer is-on" : "layer"}
                     aria-hidden={item.id !== shown.id}
                   >
-                    <Screen id={item.id} />
+                    <Screen id={item.id} image={item.image} name={item.name} />
                   </div>
                 ))}
               </div>
@@ -180,29 +197,8 @@ export function Experience() {
         ))}
       </nav>
 
-      <footer className="outro">
-        <p className="kicker">Siguiente paso</p>
-        <h2>¿Hablamos?</h2>
-        <p className="statement">
-          {profile.name} · {profile.title}
-        </p>
-        <div className="actions">
-          {profile.email ? <a href={`mailto:${profile.email}`}>Escribir un correo</a> : null}
-          {profile.linkedin ? (
-            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
-          ) : null}
-          {profile.cv ? (
-            <a href={profile.cv} target="_blank" rel="noopener noreferrer">
-              Descargar CV
-            </a>
-          ) : null}
-          <a className="ghost" href="#top">
-            Volver arriba
-          </a>
-        </div>
-      </footer>
+      <Archive />
+      <Contact />
     </main>
   );
 }

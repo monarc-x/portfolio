@@ -5,6 +5,8 @@ export type Work = {
   summary: string;
   href?: string;
   host?: string;
+  /** Captura en /public. Sin captura se muestra la ilustración. */
+  image?: string;
   /** Color de fondo de la página mientras este trabajo está en pantalla. */
   bg: string;
   ink: string;
@@ -15,12 +17,40 @@ export const profile = {
   name: "Jorge Contreras",
   title: "Desarrollador de software",
   statement:
-    "Frontend de tiendas en producción, y la modernización de un ERP de escritorio a la web.",
+    "Frontend y backend: tiendas en producción, y la modernización de un ERP de escritorio a la web.",
   /** Los botones de contacto solo aparecen si el campo tiene valor. */
+  focus: ["Frontend", "Backend", "Full stack"],
   email: "",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/jorge-code",
   cv: "",
+  location: "Perú · remoto o híbrido",
 };
+
+export type Project = {
+  name: string;
+  /** Agrupa los filtros del archivo. */
+  kind: string;
+  role: string;
+  href?: string;
+  /** Color del punto en la tarjeta. */
+  color: string;
+};
+
+/**
+ * Todo en lo que trabajaste. Puede ser larga: el archivo filtra, busca
+ * y muestra solo las primeras tarjetas hasta pulsar "Ver todo".
+ */
+export const projects: Project[] = [
+  { name: "Baby Gold", kind: "Tiendas online", role: "Frontend", href: "https://www.babygold.com/", color: "#f5c443" },
+  { name: "Guess", kind: "Tiendas online", role: "Frontend", href: "https://www.guess.com/", color: "#e3242b" },
+  { name: "NY & Company", kind: "Tiendas online", role: "Frontend", href: "https://www.nyandcompany.com/", color: "#c2185b" },
+  { name: "Ivy City", kind: "Tiendas online", role: "Frontend", href: "https://ivycityco.com/", color: "#f7a8bf" },
+  { name: "SiempreSoft ERP", kind: "ERP", role: "Desarrollo", href: "https://www.siempresoft.com/", color: "#14b8a6" },
+  { name: "SiempreSoft ERP Web", kind: "ERP", role: "Modernización web", href: "https://www.siempresoft.com/", color: "#2b59e8" },
+  { name: "Tenvio", kind: "Logística", role: "Desarrollo", href: "https://tenvio.pe/", color: "#ff7a1a" },
+];
+
+export const contactReasons = ["Oferta de trabajo", "Proyecto freelance", "Solo saludar"];
 
 export const work: Work[] = [
   {
@@ -31,6 +61,7 @@ export const work: Work[] = [
       "Interfaz de la tienda de Baby Gold, joyería de oro de 14k. El sitio está en producción y el trabajo es la capa que ve quien compra.",
     href: "https://www.babygold.com/",
     host: "babygold.com",
+    image: "/screens/babygold.png",
     bg: "#f5c443",
     ink: "#2a1d05",
     accent: "#fff3cf",
@@ -43,6 +74,7 @@ export const work: Work[] = [
       "Frontend de la tienda de Guess. Mantengo la interfaz publicada, dentro de la imagen que la marca ya tiene.",
     href: "https://www.guess.com/",
     host: "guess.com",
+    image: "/screens/guess.png",
     bg: "#e3242b",
     ink: "#fff7f2",
     accent: "#140707",
@@ -67,6 +99,7 @@ export const work: Work[] = [
       "Frontend del sitio de Ivy City. Vestidos, y una tienda que tiene que sentirse como la ropa.",
     href: "https://ivycityco.com/",
     host: "ivycityco.com",
+    image: "/screens/ivy.png",
     bg: "#f7a8bf",
     ink: "#2b1520",
     accent: "#2f6b4b",
@@ -103,6 +136,7 @@ export const work: Work[] = [
       "Plataforma para enviar carga con empresas de transporte. Conecta a quien manda el encargo con quien lo lleva.",
     href: "https://tenvio.pe/",
     host: "tenvio.pe",
+    image: "/screens/tenvio.png",
     bg: "#ff7a1a",
     ink: "#1f0e00",
     accent: "#fff4e8",

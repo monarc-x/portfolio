@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 function Dress({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 120 180" className="dress">
@@ -9,7 +11,22 @@ function Dress({ color }: { color: string }) {
   );
 }
 
-export function Screen({ id }: { id: string }) {
+export function Screen({ id, image, name }: { id: string; image?: string; name: string }) {
+  if (image) {
+    return (
+      <div className="screen s-shot">
+        <Image
+          src={image}
+          alt={`Página de inicio de ${name}`}
+          fill
+          sizes="(max-width: 860px) 100vw, 720px"
+          quality={90}
+          className="shot"
+        />
+      </div>
+    );
+  }
+
   switch (id) {
     case "babygold":
       return (
