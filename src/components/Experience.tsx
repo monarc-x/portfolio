@@ -5,6 +5,7 @@ import { profile, projects, work } from "@/data/content";
 import { Archive } from "@/components/Archive";
 import { Contact } from "@/components/Contact";
 import { Screen } from "@/components/Screens";
+import { Stack } from "@/components/Stack";
 
 const HERO = { bg: "#fff4e4", ink: "#1b1310", accent: "#ff5a36" };
 const OUTRO = { bg: "#17120f", ink: "#fff4e4", accent: "#f5c443" };
@@ -13,6 +14,12 @@ export function Experience() {
   const rootRef = useRef<HTMLElement>(null);
   const chapters = useRef<(HTMLElement | null)[]>([]);
   const [active, setActive] = useState(-1);
+  const [tech, setTech] = useState<string | null>(null);
+
+  const pickTech = (name: string) => {
+    setTech(name);
+    document.getElementById("archivo")?.scrollIntoView({ block: "start" });
+  };
 
   useEffect(() => {
     let frame = 0;
@@ -174,6 +181,11 @@ export function Experience() {
               <p className="pill">{item.role}</p>
               <h2>{item.name}</h2>
               <p className="summary">{item.summary}</p>
+              <ul className="chapter-stack" aria-label="Tecnologías">
+                {item.stack.map((name) => (
+                  <li key={name}>{name}</li>
+                ))}
+              </ul>
               {item.href ? (
                 <a className="visit" href={item.href} target="_blank" rel="noopener noreferrer">
                   Ver {item.host}
@@ -197,7 +209,8 @@ export function Experience() {
         ))}
       </nav>
 
-      <Archive />
+      <Stack onPick={pickTech} />
+      <Archive tech={tech} onTech={setTech} />
       <Contact />
     </main>
   );

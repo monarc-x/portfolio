@@ -54,6 +54,11 @@ export function Contact() {
               LinkedIn ↗
             </a>
           ) : null}
+          {profile.github ? (
+            <a href={profile.github} target="_blank" rel="noopener noreferrer">
+              GitHub ↗
+            </a>
+          ) : null}
           {profile.email ? <a href={`mailto:${profile.email}`}>Escribir un correo</a> : null}
           {profile.cv ? (
             <a href={profile.cv} target="_blank" rel="noopener noreferrer">

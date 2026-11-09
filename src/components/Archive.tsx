@@ -6,7 +6,7 @@ import { projects } from "@/data/content";
 const LIMIT = 9;
 const ALL = "Todo";
 
-export function Archive() {
+export function Archive({ tech, onTech }: { tech: string | null; onTech: (tech: string | null) => void }) {
   const [kind, setKind] = useState(ALL);
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState(false);
@@ -16,7 +16,8 @@ export function Archive() {
   const matches = projects.filter(
     (item) =>
       (kind === ALL || item.kind === kind) &&
-      (!needle || `${item.name} ${item.role} ${item.kind}`.toLowerCase().includes(needle)),
+      (!tech || item.stack.includes(tech)) &&
+      (!needle || `${item.name} ${item.role} ${item.kind} ${item.stack.join(" ")}`.toLowerCase().includes(needle)),
   );
   const visible = expanded ? matches : matches.slice(0, LIMIT);
 
@@ -48,12 +49,18 @@ export function Archive() {
               <span>{name === ALL ? projects.length : projects.filter((item) => item.kind === name).length}</span>
             </button>
           ))}
+          {tech ? (
+            <button type="button" className="tech-filter" onClick={() => onTech(null)} aria-label={`Quitar filtro ${tech}`}>
+              {tech}
+              <span aria-hidden="true">✕</span>
+            </button>
+          ) : null}
         </div>
         <label className="search">
           <span className="sr-only">Buscar proyecto</span>
           <input
             type="search"
-            placeholder="Buscar proyecto, rol…"
+            placeholder="Buscar proyecto, rol o tecnología…"
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);
@@ -70,6 +77,15 @@ export function Archive() {
               <span className="card-kind">{item.kind}</span>
               <h3>{item.name}</h3>
               <p>{item.role}</p>
+              {item.stack.length ? (
+                <ul className="tags" aria-label="Tecnologías">
+                  {item.stack.map((name) => (
+                    <li key={name} className={name === tech ? "is-on" : undefined}>
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               {item.href ? (
                 <a href={item.href} target="_blank" rel="noopener noreferrer" aria-label={`Visitar ${item.name}`}>
                   ↗
@@ -79,7 +95,7 @@ export function Archive() {
           ))}
         </ul>
       ) : (
-        <p className="empty">Nada con “{query}”. Prueba con otra palabra.</p>
+        <p className="empty">No hay proyectos con ese filtro. Prueba con otro.</p>
       )}
 
       {matches.length > LIMIT ? (
