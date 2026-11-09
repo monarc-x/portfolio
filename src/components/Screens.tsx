@@ -16,11 +16,10 @@ export function Screen({ id, image, name }: { id: string; image?: string; name: 
     return (
       <div className="screen s-shot">
         <Image
-          src={image}
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH}${image}`}
           alt={`Página de inicio de ${name}`}
           fill
           sizes="(max-width: 860px) 100vw, 720px"
-          quality={90}
           className="shot"
         />
       </div>
